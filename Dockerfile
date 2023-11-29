@@ -6,4 +6,4 @@ ADD "./submodules/code-validator-api" "/etc/submodules/code-validator-api"
 ADD "./files" "/etc/ccda/files"
 
 # Do the magic
-RUN /etc/ccda/files/scripts/do-magic-tomcat.sh
+RUN /etc/ccda/files/scripts/do-magic.sh
