@@ -6,6 +6,7 @@ CCDA Validator in a docker container
 
 - Docker
 - A Reference CCDA Validator Service war file
+- Vocabulary files
 
 ### Reference CCDA Validator Service War
 
@@ -17,14 +18,24 @@ There are two ways to get the necessary war file:
    2. This is necessary if you are going to do remote debugging.
 2. Grab a release from: https://github.com/onc-healthit/reference-ccda-validator/releases
 
+### Vocabulary Files
+
+The Docker image is setup so that the Reference Validator will read VSAC vocabulary files out of the /etc/ccda/files/validator_configuration/vocabulary/valueset_repository/VSAC directory.
+
+Vocabulary files _are not_ supplied in this repository and therefore those will need to be provided when starting a container via bind mounting.
+
+The production Reference Validator uses VSAC vocabulary files which are not available publicly, so it is assumed that you have those available. 
+
+There are a few public files available in the [code-validator-api](https://github.com/onc-healthit/code-validator-api) repository which can be used to get moving with this Docker setup.  If you clone that repository you will find these files in the codevalidator-api/docs/ValueSetsHandCreatedbySITE directory of that repository.  
+
 ## Basic Usage
 
 ### Clone The Repository
 
-git clone this repo (and submodules! **VERY** important!)
+git clone this repository
 
 ```
-git clone --recurse-submodules https://github.com/austinmoody/docker-ccda-validator.git
+git clone https://github.com/austinmoody/docker-ccda-validator.git
 ```
 
 ### Build the Docker Image
@@ -40,6 +51,7 @@ Run a Docker container using the built image.
 docker run -d --rm \
 -p 8080:8080 \
 -v /Users/moodya/Dev/Fed/site/reference-ccda-validator/target:/usr/local/tomcat/webapps \
+-v /Users/moodya/Dev/Fed/site/VSAC:/etc/ccda/files/validator_configuration/vocabulary/valueset_repository/VSAC \
 docker-ccda-validator \
 /usr/local/tomcat/bin/catalina.sh run
 ```
@@ -49,7 +61,8 @@ _Notes_
 - Remove the ```-d``` to run the container in the foreground.
 - Remove the ```--rm``` to prevent the container from being removed once it is stopped.
 - Tomcat is set to use the default port of 8080.  In our example the ```-p``` option exposes this same port to the host.  You could do something like ```-p 10800:8080``` to then hit port 10800 for the service from your local machine.
-- We need to provide a war to deploy in /usr/local/tomcat/webapps on the running Docker container.  Since the image is not built with a war, we do this by bind mounting a local directory containing the referenceccdaservice.war file to the webapps directory using the ```-v``` option. 
+- We need to provide a war to deploy in /usr/local/tomcat/webapps on the running Docker container.  Since the image is not built with a war, we do this by bind mounting a local directory containing the referenceccdaservice.war file to the webapps directory using the ```-v``` option.
+- We need to provide vocabulary files for the application to use. Vocabulary files are not built into the image, therefore we need to bind mount to a directory containing them using the ```-v``` option.
 
 ### Use / Verify
 
@@ -90,6 +103,7 @@ docker run -d --rm \
 -p 8080:8080 \
 -p 8000:8000 \
 -v /Users/moodya/Dev/Fed/site/reference-ccda-validator/target:/usr/local/tomcat/webapps \
+-v /Users/moodya/Dev/Fed/site/VSAC:/etc/ccda/files/validator_configuration/vocabulary/valueset_repository/VSAC \
 docker-ccda-validator \
 /usr/local/tomcat/bin/catalina.sh jpda run
 ```
