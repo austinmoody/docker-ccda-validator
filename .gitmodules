@@ -1,4 +1,0 @@
-[submodule "submodules/code-validator-api"]
-	path = submodules/code-validator-api
-	url = https://github.com/siteadmin/code-validator-api
-	branch = master

@@ -12,8 +12,5 @@ COPY files/configs_folder/ccdaReferenceValidatorConfig.xml /etc/ccda/files/confi
 # content.scenariosDir
 RUN mkdir -p /etc/ccda/files/validator_configuration/scenarios_directory
 
-# Copy validator api XLSX files
-COPY submodules/code-validator-api/codevalidator-api/docs/ValueSetsHandCreatedbySITE/*.xlsx /etc/ccda/files/validator_configuration/vocabulary/valueset_repository/VSAC/
-
 COPY files/config_extra/web.xml /usr/local/tomcat/conf/
 COPY files/config_extra/referenceccdaservice.xml /usr/local/tomcat/conf/Catalina/localhost/referenceccdaservice.xml
